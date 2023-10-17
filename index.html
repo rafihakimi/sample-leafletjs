@@ -73,7 +73,33 @@
 	subdomains: 'abcd',
 	maxZoom: 19
 	});
+
+	var radi = L.circle([-7.768144452028461, 110.40470123291016],{
+		radius : 100000,
+		color : 'black'
+	});
 	
+	var lay = L.geoJSON(jogjageojson,{
+		style: function(feature) {
+			switch (feature.properties.KABUPATEN) {
+				case 'Gunung Kidul': return {color: "#ff9900"};
+				case 'Sleman':   return {color: "red"};
+				case 'Bantul':   return {color: "blue"};
+				case 'Yogyakarta':   return {color: "green"};
+				case 'Kulon Progo':   return {color: "magenta"};
+			}
+		},
+		onEachFeature: function (feature, layer) {
+			layer.bindPopup(
+			'Kecamatan ' + 
+			'<strong>' +
+			feature.properties.KECAMATAN +
+			'</strong>' + ' ' +
+			'Kabupaten ' + '<strong>' +
+			 feature.properties.KABUPATEN + '<strong>'
+			);
+		}
+	});
 	
 	var gunkid = L.marker([-7.773247002978248, 110.35423278808594]).bindPopup('jjg'),
 		sleman    = L.marker([-7.768144452028461, 110.40470123291016]).bindPopup('jgjh'),
@@ -84,13 +110,15 @@
 	
 	
 	var baseMaps = {
-		"Openstreetmap": tes,
 		"Dark Mode Carto": carto,
-		"Citra Satelit ESRI": esri
+		"Citra Satelit ESRI": esri,
+		"Openstreetmap": tes
 	};
 	
 	var overlayMaps = {
-		"Jogja": jogja
+		"Jogja": jogja,
+		"radius": radi,
+		"layer": lay
 	};
 	
 	L.control.layers(baseMaps, overlayMaps).addTo(map);
@@ -133,27 +161,7 @@
 	}
 	
 	
-	L.geoJSON(jogjageojson,{
-		style: function(feature) {
-			switch (feature.properties.KABUPATEN) {
-				case 'Gunung Kidul': return {color: "#ff9900"};
-				case 'Sleman':   return {color: "red"};
-				case 'Bantul':   return {color: "blue"};
-				case 'Yogyakarta':   return {color: "green"};
-				case 'Kulon Progo':   return {color: "magenta"};
-			}
-		},
-		onEachFeature: function (feature, layer) {
-			layer.bindPopup(
-			'Kecamatan ' + 
-			'<strong>' +
-			feature.properties.KECAMATAN +
-			'</strong>' + ' ' +
-			'Kabupaten ' + '<strong>' +
-			 feature.properties.KABUPATEN + '<strong>'
-			);
-		}
-	}).addTo(map);
+	
 	
 	
     </script>
